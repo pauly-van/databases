@@ -4,28 +4,26 @@ module.exports = {
   messages: {
 
     // A function which produces all the messages
-    get: function () {
+    get: function (callback) {
       let query = 'SELECT message_text FROM messages';
       db.con.query(query, (err, result) => {
-        if (err) { throw err; }
-        console.log('result: ', result);
+        if (err) { callback(err); } else {
+          callback(null, result);
+        }
       });
-      return result;
     },
 
     // A function which writes a message to the db
-    post: function (request) {
+    post: function (request, callback) {
       let text = JSON.stringify(request.text);
-      console.log(text);
-      let query = `INSERT INTO messages (message_id, message_text) VALUES (4,'${text}')`;
+      let query = `INSERT INTO messages (message_text) VALUES ('${text}')`;
       // work on the auto increment
       db.con.query(query, (err, result) => {
         if (err) {
-          console.log('error on post', err);
-          return;
+          callback(err);
+        } else {
+          callback(null, result);
         }
-        console.log('result: ', result);
-        return result;
       });
     }
   },
@@ -34,21 +32,21 @@ module.exports = {
   users: {
 
     // A function which produces all the users?
-    get: function (query) {
-      query = `SELECT username FROM users WHERE username = ${query.name}`;
-      db.con.query(query, (err, result) => {
-        if (err) { throw err; }
-        console.log('result: ', result);
-        return result;
+    get: function (callback) {
+      db.con.query('SELECT * FROM users', (err, result) => {
+        if (err) { callback(err); } else {
+          callback(null, result);
+        }
       });
     },
 
     // A function which writes a user to the db
-    post: function (query) {
-      query = `INSERT INTO users (user_id, username) VALUES(1, ${query.name});`;
+    post: function (response, callback) {
+      query = `INSERT INTO users (username) VALUES('${JSON.stringify(response.username)}');`;
       db.con.query(query, (err, result) => {
-        if (err) { throw err; }
-        console.log('result: ', result); return result;
+        if (err) { callback(err); } else {
+          callback(null, result);
+        }
       });
     }
   }

@@ -7,10 +7,10 @@ const db = require('../models');
 
 
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "chat"
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'chat'
 });
 
 con.connect();
