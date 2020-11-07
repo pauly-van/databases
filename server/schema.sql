@@ -3,14 +3,16 @@ CREATE DATABASE chat;
 USE chat;
 
 CREATE TABLE users (
-  user_id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
   username text
 );
 
 CREATE TABLE messages (
-  message_id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
   message_text text,
   roomname text,
+  createdAt integer,
+  updatedAt integer,
   user_id integer
   -- FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
