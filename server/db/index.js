@@ -9,7 +9,7 @@ const db = require('../models');
 var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: '',
   database: 'chat'
 });
 

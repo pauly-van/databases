@@ -9,16 +9,24 @@ CREATE TABLE users (
 
 CREATE TABLE messages (
   message_id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  message_text text
-  -- FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
-CREATE TABLE rooms (
-  room_id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  room_name text
-  -- FOREIGN KEY (message_id) REFERENCES messages(message_id),
+  message_text text,
+  roomname text,
+  user_id integer
   -- FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
+
+-- CREATE TABLE rooms (
+--   room_id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
+--   room_name text
+-- );
+
+-- CREATE TABLE messages_rooms (
+--   id integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
+--   message_id integer,
+--   room_id integer
+  -- FOREIGN KEY (message_id) REFERENCES messages(message_id),
+  -- FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+-- );
 
 /* Create other tables and define schemas for them here! */
 

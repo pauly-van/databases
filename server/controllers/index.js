@@ -7,10 +7,10 @@ module.exports = {
     get: function (req, res) {
       models.messages.get((err, data)=>{
         if (err) {
-          res.status(404).send('Messages not found');
+          res.status(404).send('Messages not found').end();
           console.log('Error! ', err );
         } else {
-          res.status(200).send(data).end(); 
+          res.status(200).send(data).end();
           console.log('result from messages table is:', data);
         }
       });
@@ -20,12 +20,13 @@ module.exports = {
 
     // A function which handles posting a message to the database
     post: function (req, res) {
-      // We may need promise here
       models.messages.post(req.body, (err, data) =>{
         if (err) {
           res.status(500).send('Fail, can not save to database').end();
           console.log('Error! ', err);
         } else {
+          res.send(data);
+          console.log(data);
           res.status(200).end();
         }
       });
