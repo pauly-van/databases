@@ -16,10 +16,20 @@ const { Sequelize } = require('sequelize');
 
 // con.connect();
 
+// var sequelize = new Sequelize('sequelize_test', 'root', null, {
+//   host: "127.0.0.1",
+//   dialect: 'mysql',
+//   define: {
+//       timestamps: false
+//   }
+// });
 
 const sequelize = new Sequelize('chat', 'root', '', {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  define: {
+    timestamps: false
+  }
 });
 
 var messages = sequelize.define('messages', {
@@ -43,9 +53,12 @@ var users = sequelize.define('users', {
   username: Sequelize.STRING(20)
 });
 
+users.hasMany(messages);
+messages.belongsTo(users);
 
+messages.sync();
+users.sync();
 
 module.exports.sequelize = sequelize;
 module.exports.users = users;
 module.exports.messages = messages;
-global.sequelize = sequelize;

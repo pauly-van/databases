@@ -1,66 +1,73 @@
 var models = require('../models');
+const db = require('../db');
+const bluebird = require('bluebird');
+const sequelize = require('sequelize');
+
 
 module.exports = {
+
   messages: {
 
-    // A function which handles a get request for all messages
     get: function (req, res) {
-      models.messages.get((err, data)=>{
-        if (err) {
-          res.status(404).send('Messages not found').end();
-          console.log('Error! ', err );
-        } else {
-          res.status(200).send(data).end();
-          console.log('result from messages table is:', data);
-        }
-      });
-      // We get all messages
-      // We send in response an object of arrays containing the messages
+      db.messages.findAll()
+        .then((err, result)=> {
+          if (err) {
+            throw err;
+          } else {
+            res.status(201).json(result);
+          }
+        });
     },
 
-    // A function which handles posting a message to the database
     post: function (req, res) {
-      models.messages.post(req.body, (err, data) =>{
-        if (err) {
-          res.status(500).send('Fail, can not save to database').end();
-          console.log('Error! ', err);
-        } else {
-          res.send(data);
-          console.log(data);
-          res.status(200).end();
-        }
-      });
+      // console.log(req.body["username"])
+      db.users.findOrCreate({where: {username: req.body['username']}})
+        .then((err, result)=>{
+          let msg = {
+            id: result,
+            message_text: req.body['text'],
+            roomname: req.body['roomname']
+          };
+          db.messages.create(msg)
+            .then((err, result) => {
+              if (err) {
+                throw err;
+              } else {
+                res.status(201);
+              }
+            })
+            .catch(err);
+        })
+        .catch(err);
     }
   },
 
   users: {
 
-    // A function which handles a get request for a specific user's messages?
     get: function (req, res) {
-      models.users.get((err, data)=>{
-        if (err) {
-          res.status(404).send('User not found').end();
-          console.log('Error! ', err);
-        } else {
-          res.status(200).send(data).end();
-          console.log('result from user table is: ', data);
-        }
-      });
+      db.users.findAll()
+        .then((err, result) => {
+          if (err) {
+            throw err;
+          } else {
+            res.status(201).json(result);
+          }
+        });
     },
 
-    // A function which handles posting a user to the database. Only happens at the beginning of the client interaction. Right?
     post: function (req, res) {
-      models.users.post(req.body, (err, data)=>{
-        if (err) {
-          res.status(500).send('Unable to save user to database').end();
-          console.log('Error! ', err);
-        } else {
-          res.status(200).end();
-        }
-      });
+      db.users.create(req.body)
+        .then((err, result) => {
+          if (err) {
+            throw err;
+          } else {
+            res.status(201);
+          }
+        });
     }
   }
 };
+
 
 
 
